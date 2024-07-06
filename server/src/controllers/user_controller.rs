@@ -39,7 +39,7 @@ pub async fn post_user(
     }
 }
 
-pub async fn update_user(Path(id): Path<String>, Json(mut user_data): Json<Value>) -> (StatusCode, Json<User>) {
+pub async fn update_user(Path(id): Path<String>, Json(user_data): Json<Value>) -> (StatusCode, Json<User>) {
     let shared_pool = pool().await;
     match serde_json::from_value::<User>(user_data.clone()) {
         Ok(user) => {
@@ -49,5 +49,13 @@ pub async fn update_user(Path(id): Path<String>, Json(mut user_data): Json<Value
             }
         },
         Err(_) => (StatusCode::BAD_REQUEST, Json(User::new_empty()))
+    }
+}
+
+pub async fn delete_user(Path(id): Path<String>) -> (StatusCode, Json<String>) {
+    let shared_pool = pool().await;
+    match delete_user_in_db_by_id(&shared_pool, &id).await {
+        Ok(_) => (StatusCode::OK, Json("deleted".to_string())),
+        Err(_) => (StatusCode::INTERNAL_SERVER_ERROR, Json("error".to_string()))
     }
 }
