@@ -1,10 +1,19 @@
 [package]
-name = "kotinski-api"
+name = "qats-api"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+axum = "0.7.5"
+dotenv = "0.15.0"
+dotenv_codegen = "0.15.0"
+futures = "0.3.30"
 postgres = "0.19.7"
-serde = "1.0.203"
+serde = { version = "1.0.203", features = ["derive"] }
 serde_derive = "1.0.203"
 serde_json = "1.0.120"
+sqlx = {version = "0.7.4", features = ["postgres", "macros", "runtime-tokio-rustls"] }
+tokio = { version = "1.38.0", features = ["full"] }
+tokio-tungstenite = "0.23.1"
+tower = "0.4.13"
+uuid = { version = "1.9.1", features = ["v7"] }
