@@ -13,6 +13,7 @@ pub async fn get_all_users_in_db(pool: &PgPool) -> Result<Vec<User>, Error> {
         r#"
             SELECT 
                 id, 
+                active,
                 name, 
                 email, 
                 password, 
@@ -43,6 +44,7 @@ pub async fn get_user_in_db_by_id(pool: &PgPool, user_id: String) -> Result<Opti
         r#"
             SELECT 
                 id, 
+                active,
                 name, 
                 email, 
                 password, 
@@ -72,6 +74,7 @@ pub async fn get_user_in_db_by_email(pool: &PgPool, email: String) -> Result<Opt
         r#"
             SELECT 
                 id, 
+                active::bool as "active",
                 name, 
                 email, 
                 password, 
@@ -99,12 +102,13 @@ pub async fn update_user_in_db(pool: &PgPool, user_id: &str, new_data: &User) ->
     sqlx::query!(
         r#"
         UPDATE users
-        SET name = $1, email = $2, password = $3, date_of_birth = $4,
-            cpf = $5, location_lat = $6::real, location_lng = $7::real,
-            uniques_store = $8, uniques_station = $9, uniques_can_change = $10,
-            role = $11, phone_number = $12
-        WHERE id = $13
+        SET active = $1, name = $2, email = $3, password = $4, date_of_birth = $5,
+            cpf = $6, location_lat = $7::real, location_lng = $8::real,
+            uniques_store = $9, uniques_station = $10, uniques_can_change = $11,
+            role = $12, phone_number = $13
+        WHERE id = $14
         "#,
+        new_data.active,
         new_data.name,
         new_data.email,
         new_data.password,
@@ -145,6 +149,7 @@ pub async fn get_user_in_db_by_cpf(pool: &PgPool, cpf: String) -> Result<Option<
         r#"
             SELECT 
                 id, 
+                active::bool as "active",
                 name, 
                 email, 
                 password, 
@@ -173,14 +178,15 @@ pub async fn create_user_in_db(pool: &PgPool, user: &User) -> Result<(), Error> 
     sqlx::query!(
         r#"
         INSERT INTO users (
-            id, name, email, password, date_of_birth, cpf,
+            id, active, name, email, password, date_of_birth, cpf,
             location_lat, location_lng, uniques_store, uniques_station,
             uniques_can_change, role, phone_number
         ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7::real, $8::real, $9, $10, $11, $12, $13
+            $1, $2::bool, $3, $4, $5, $6, $7, $8::real, $9::real, $10, $11, $12, $13, $14
         )
         "#,
         user.id,
+        user.active,
         user.name,
         user.email,
         user.password,
