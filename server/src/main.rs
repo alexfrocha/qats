@@ -20,6 +20,9 @@ async fn main() {
             "/",
             get(|| async { "hello world" })
         )
+        // '/sale' route
+        // '/station' route
+        // '/store' route
         // '/users' route
         .route("/users", get(get_users))
         .route("/users/create", post(post_user))

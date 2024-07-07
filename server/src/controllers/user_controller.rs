@@ -68,6 +68,7 @@ pub async fn post_user(
 
 pub async fn update_user(Path(id): Path<String>, Json(user_data): Json<Value>) -> (StatusCode, Json<User>) {
     let shared_pool = pool().await;
+    
     match serde_json::from_value::<User>(user_data.clone()) {
         Ok(user) => {
             match update_user_in_db(&shared_pool, &id, &user).await {

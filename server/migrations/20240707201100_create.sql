@@ -1,4 +1,5 @@
 -- Add migration script here
+-- Add migration script here
 
 CREATE TABLE users (
     id VARCHAR(36) NOT NULL,
@@ -30,6 +31,7 @@ CREATE TABLE stores (
     location_state VARCHAR(255) NOT NULL,
     location_lat FLOAT NOT NULL,
     location_lng FLOAT NOT NULL,
+    images JSONB,
     PRIMARY KEY (id)
 );
 
@@ -45,6 +47,8 @@ CREATE TABLE stations (
     location_state VARCHAR(255) NOT NULL,
     location_lat FLOAT NOT NULL,
     location_lng FLOAT NOT NULL,
+    images JSONB,
+    fuels JSONB,
     PRIMARY KEY (id)
 );
 
