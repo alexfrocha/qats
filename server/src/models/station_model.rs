@@ -1,7 +1,6 @@
-use std::collections::HashMap;
 use serde_json::Value as JsonValue;
 
-use sqlx::{prelude::FromRow, types::Json};
+use sqlx::prelude::FromRow;
 
 #[derive(Serialize, Deserialize, FromRow)]
 pub struct Station {

@@ -6,6 +6,7 @@ pub mod db;
 
 use axum::routing::{ get, post, put, delete };
 use axum::Router;
+use controllers::station_controller::{create_station, delete_station, get_station_by_id, get_stations, update_station};
 use controllers::user_controller::{ delete_user, get_user_by_cpf, get_user_by_email, get_user_by_id, get_users, post_user, update_user };
 
 
@@ -22,6 +23,11 @@ async fn main() {
         )
         // '/sale' route
         // '/station' route
+        .route("/stations", get(get_stations))
+        .route("/stations/create", post(create_station))
+        .route("/stations/:id", get(get_station_by_id))
+        .route("/stations/update/:id", put(update_station))
+        .route("/stations/delete/:id", delete(delete_station))
         // '/store' route
         // '/users' route
         .route("/users", get(get_users))
