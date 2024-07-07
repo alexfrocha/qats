@@ -2,7 +2,7 @@ use axum::{ extract::Path, http::StatusCode, response::IntoResponse, Json };
 use serde_json::{json, Value};
 use uuid::Uuid;
 
-use crate::{ db::pool, models::user_model::User, services::user_service::{create_user_in_db, delete_user_in_db_by_id, get_all_users_in_db, get_user_in_db_by_id, update_user_in_db} };
+use crate::{ db::pool, models::user_model::User, services::user_service::{create_user_in_db, delete_user_in_db_by_id, get_all_users_in_db, get_user_in_db_by_email, get_user_in_db_by_id, update_user_in_db} };
 
 pub async fn get_users() -> impl IntoResponse {
     let shared_pool = pool().await;
@@ -15,6 +15,15 @@ pub async fn get_users() -> impl IntoResponse {
 pub async fn get_user_by_id(Path(id): Path<String>) -> impl IntoResponse {
     let shared_pool = pool().await;
     match get_user_in_db_by_id(&shared_pool, id).await {
+        Ok(Some(user)) => (StatusCode::OK, Json(user)),
+        Ok(None) => (StatusCode::NOT_FOUND, Json(User::new_empty())),
+        Err(_) => (StatusCode::INTERNAL_SERVER_ERROR, Json(User::new_empty())),
+    }
+}
+
+pub async fn get_user_by_email(Path(email): Path<String>) -> impl IntoResponse {
+    let shared_pool = pool().await;
+    match get_user_in_db_by_email(&shared_pool, email).await {
         Ok(Some(user)) => (StatusCode::OK, Json(user)),
         Ok(None) => (StatusCode::NOT_FOUND, Json(User::new_empty())),
         Err(_) => (StatusCode::INTERNAL_SERVER_ERROR, Json(User::new_empty())),
