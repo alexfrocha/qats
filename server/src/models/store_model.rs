@@ -2,7 +2,7 @@
 pub struct Store {
     id: Option<String>,
     name: String,
-    description: String,
+    description: Option<String>,
     location_addr: String,
     location_neighborhood: String,
     location_postal_code: String,

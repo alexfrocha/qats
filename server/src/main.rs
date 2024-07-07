@@ -14,15 +14,13 @@ extern crate serde_derive;
 
 #[tokio::main]
 async fn main() {
-    // Tenta configurar o banco de dados, com retentativa em caso de falha inicial
-    // set_database().await.unwrap();
 
-    // Configura as rotas
     let app = Router::new()
         .route(
             "/",
             get(|| async { "hello world" })
         )
+        // '/users' route
         .route("/users", get(get_users))
         .route("/users/create", post(post_user))
         .route("/users/id/:id", get(get_user_by_id))
