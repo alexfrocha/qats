@@ -1,6 +1,7 @@
 pub mod models;
 pub mod services;
 pub mod controllers;
+pub mod test;
 pub mod db;
 
 use axum::routing::{ get, post, put, delete };
