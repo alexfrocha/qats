@@ -1,17 +1,40 @@
 use std::collections::HashMap;
+use serde_json::Value as JsonValue;
 
-#[derive(Serialize, Deserialize)]
+use sqlx::{prelude::FromRow, types::Json};
+
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct Station {
-    id: Option<String>,
-    name: String,
-    description: Option<String>,
-    location_addr: String,
-    location_neighborhood: String,
-    location_postal_code: String,
-    location_city: String,
-    location_state: String,
-    location_lat: f32,
-    location_lng: f32,
-    images: Vec<String>,
-    fuels: Vec<HashMap<String, String>>
+    pub id: Option<String>,
+    pub name: String,
+    pub description: Option<String>,
+    pub location_addr: String,
+    pub location_neighborhood: String,
+    pub location_postal_code: String,
+    pub location_city: String,
+    pub location_state: String,
+    pub location_lat: f32,
+    pub location_lng: f32,
+    pub images: Option<JsonValue>,
+    pub fuels: Option<JsonValue>
 } 
+
+impl Station {
+    pub fn new_empty() -> Self {
+        Self {
+            id: None,
+            name: String::new(),
+            description: None,
+            location_addr: String::new(),
+            location_neighborhood: String::new(),
+            location_postal_code: String::new(),
+            location_city: String::new(),
+            location_state: String::new(),
+            location_lng: 0.0,
+            location_lat: 0.0,
+            images: None,
+            fuels: None
+
+        }
+    }
+}
