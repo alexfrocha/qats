@@ -26,7 +26,7 @@ pub async fn get_all_stores_in_db(pool: &PgPool) -> Result<Vec<Store>, Error> {
     Ok(rows)
 }
 
-pub async fn create_station_in_db(pool: &PgPool, store: &Store) -> Result<(), Error> {
+pub async fn create_store_in_db(pool: &PgPool, store: &Store) -> Result<(), Error> {
     sqlx::query!(
         r#"
         INSERT INTO stores (
@@ -52,7 +52,7 @@ pub async fn create_station_in_db(pool: &PgPool, store: &Store) -> Result<(), Er
     Ok(())
 }
 
-pub async fn delete_station_in_db_by_id(pool: &PgPool, store_id: &str) -> Result<(), Error> {
+pub async fn delete_store_in_db_by_id(pool: &PgPool, store_id: &str) -> Result<(), Error> {
     sqlx::query!(
         r#"DELETE FROM stores WHERE id = $1"#,
         store_id
@@ -61,7 +61,7 @@ pub async fn delete_station_in_db_by_id(pool: &PgPool, store_id: &str) -> Result
     Ok(())
 }
 
-pub async fn update_station_in_db(pool: &PgPool, station_id: &str, new_store: &Store) -> Result<(), Error> {
+pub async fn update_store_in_db(pool: &PgPool, station_id: &str, new_store: &Store) -> Result<(), Error> {
     sqlx::query!(
         r#"
         UPDATE stores
