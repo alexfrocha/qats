@@ -6,6 +6,7 @@ pub mod db;
 
 use axum::routing::{ get, post, put, delete };
 use axum::Router;
+use controllers::sale_controller::{create_sale, get_sales, get_sales_by_buyer_id, get_sales_by_id, get_sales_by_seller_id, update_sale};
 use controllers::station_controller::{create_station, delete_station, get_station_by_id, get_stations, update_station};
 use controllers::store_controller::{create_store, delete_store, get_store_by_id, get_stores, update_store};
 use controllers::user_controller::{ delete_user, get_user_by_cpf, get_user_by_email, get_user_by_id, get_users, post_user, update_user };
@@ -16,13 +17,19 @@ extern crate serde_derive;
 
 #[tokio::main]
 async fn main() {
-
     let app = Router::new()
         .route(
             "/",
             get(|| async { "hello world" })
         )
         // '/sale' route
+        .route("/sales", get(get_sales))
+        .route("/sales/create", post(create_sale))
+        .route("/sales/:id", get(get_sales_by_id))
+        .route("/sales/buyer/:buyer_id", get(get_sales_by_buyer_id))
+        .route("/sales/seller/:seller_id", get(get_sales_by_seller_id))
+        .route("/sales/update/:id", put(update_sale))
+        .route("/sales/delete/:id", delete(delete_station))
         // '/station' route
         .route("/stations", get(get_stations))
         .route("/stations/create", post(create_station))
@@ -44,7 +51,6 @@ async fn main() {
         .route("/users/update/:id", put(update_user))
         .route("/users/delete/:id", delete(delete_user));
 
-    // Inicia o servidor HTTP
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
