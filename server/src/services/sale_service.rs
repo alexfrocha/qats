@@ -1,6 +1,5 @@
 extern crate sqlx;
 
-use sqlx::query;
 use sqlx::PgPool;
 use sqlx::Error;
 

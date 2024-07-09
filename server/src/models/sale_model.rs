@@ -1,5 +1,4 @@
-use std::time::SystemTime;
-use chrono::{NaiveDateTime, Utc};
+use chrono::{NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use sqlx::{prelude::FromRow};
 
