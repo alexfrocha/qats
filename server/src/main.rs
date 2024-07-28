@@ -18,39 +18,51 @@ extern crate serde_derive;
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route(
-            "/",
-            get(|| async { "hello world" })
-        )
-        // '/sale' route
-        .route("/sales", get(get_sales))
-        .route("/sales/create", post(create_sale))
-        .route("/sales/:id", get(get_sales_by_id))
-        .route("/sales/buyer/:buyer_id", get(get_sales_by_buyer_id))
-        .route("/sales/seller/:seller_id", get(get_sales_by_seller_id))
-        .route("/sales/update/:id", put(update_sale))
-        .route("/sales/delete/:id", delete(delete_station))
-        // '/station' route
-        .route("/stations", get(get_stations))
-        .route("/stations/create", post(create_station))
-        .route("/stations/:id", get(get_station_by_id))
-        .route("/stations/update/:id", put(update_station))
-        .route("/stations/delete/:id", delete(delete_station))
-        // '/store' route
-        .route("/stores", get(get_stores))
-        .route("/stores/create", post(create_store))
-        .route("/stores/:id", get(get_store_by_id))
-        .route("/stores/update/:id", put(update_store))
-        .route("/stores/delete/:id", delete(delete_store))
-        // '/users' route
-        .route("/users", get(get_users))
-        .route("/users/create", post(post_user))
-        .route("/users/id/:id", get(get_user_by_id))
-        .route("/users/email/:email", get(get_user_by_email))
-        .route("/users/cpf/:cpf", get(get_user_by_cpf))
-        .route("/users/update/:id", put(update_user))
-        .route("/users/delete/:id", delete(delete_user));
+        .nest("/sales", sales_router())
+        .nest("/satations", stations_router())
+        .nest("/stores", stores_router())
+        .nest("/users", users_router());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
     axum::serve(listener, app).await.unwrap();
+}
+
+fn sales_router() -> Router {
+    Router::new()
+        .route("/", get(get_sales))
+        .route("/create", post(create_sale))
+        .route("/:id", get(get_sales_by_id))
+        .route("/buyer/:buyer_id", get(get_sales_by_buyer_id))
+        .route("/seller/:seller_id", get(get_sales_by_seller_id))
+        .route("/update/:id", put(update_sale))
+        .route("/delete/:id", delete(delete_station))
+}
+
+fn stations_router() -> Router {
+    Router::new()
+        .route("/", get(get_stations))
+        .route("/create", post(create_station))
+        .route("/:id", get(get_station_by_id))
+        .route("/update/:id", put(update_station))
+        .route("/delete/:id", delete(delete_station))
+}
+
+fn stores_router() -> Router {
+    Router::new()
+        .route("/", get(get_stores))
+        .route("/create", post(create_store))
+        .route("/:id", get(get_store_by_id))
+        .route("/update/:id", put(update_store))
+        .route("/delete/:id", delete(delete_store))
+}
+
+fn users_router() -> Router {
+    Router::new()
+        .route("/", get(get_users))
+        .route("/create", post(post_user))
+        .route("/id/:id", get(get_user_by_id))
+        .route("/email/:email", get(get_user_by_email))
+        .route("/cpf/:cpf", get(get_user_by_cpf))
+        .route("/update/:id", put(update_user))
+        .route("/delete/:id", delete(delete_user))
 }
