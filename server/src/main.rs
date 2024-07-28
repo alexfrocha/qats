@@ -18,8 +18,9 @@ extern crate serde_derive;
 #[tokio::main]
 async fn main() {
     let app = Router::new()
+        .route("/", get(|| async {"testing"}))
         .nest("/sales", sales_router())
-        .nest("/satations", stations_router())
+        .nest("/stations", stations_router())
         .nest("/stores", stores_router())
         .nest("/users", users_router());
 
